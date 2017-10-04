@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>СТУПЕНИ</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700,900&subset=cyrillic" rel="stylesheet">
+</head>
+<body>
+<div id="app">
+    <transition name="auth">
+        <auth v-if="not_authenticated" v-on:authenticate="not_authenticated = !not_authenticated"></auth>
+    </transition>
+    <div class="main">
+        <div class="left_nav">
+            <ul>
+                <router-link to="/">
+                    <li>
+                        <span class="fa-stack fa-2x">
+                        <i class="fa fa-circle fa-stack-2x"></i>
+                        <i class="fa fa-home fa-stack-1x fa-inverse"></i>
+                        </span><br/>
+                        Домой
+                    </li>
+                </router-link>
+
+                <router-link to="/tests">
+                    <li>
+                        <span class="fa-stack fa-2x">
+                        <i class="fa fa-circle fa-stack-2x"></i>
+                        <i class="fa fa-check-square-o fa-stack-1x fa-inverse"></i>
+                        </span><br/>
+                        Тесты
+                    </li>
+                </router-link>
+
+                <router-link to="/edu_blocks">
+                <li>
+                    <span class="fa-stack fa-2x">
+                        <i class="fa fa-circle fa-stack-2x"></i>
+                        <i class="fa fa fa-graduation-cap fa-stack-1x fa-inverse"></i>
+                        </span><br/>
+                    Обр.блоки
+                </li>
+                </router-link>
+
+                <li>
+                    <span class="fa-stack fa-2x">
+                        <i class="fa fa-circle fa-stack-2x"></i>
+                        <i class="fa fa fa-user-circle-o fa-stack-1x fa-inverse"></i>
+                        </span><br/>
+                    Заявки</li>
+                <li>
+                    <span class="fa-stack fa-2x">
+                        <i class="fa fa-circle fa-stack-2x"></i>
+                        <i class="fa fa fa-calendar fa-stack-1x fa-inverse"></i>
+                        </span><br/>
+                    Расписание</li>
+            </ul>
+        </div>
+        <transition name="content" mode="out-in">
+            <router-view></router-view>
+        </transition>
+    </div>
+</div>
+<script src="./dist/build.js"></script>
+</body>
+</html>
