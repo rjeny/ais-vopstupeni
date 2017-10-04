@@ -2374,7 +2374,7 @@ a, a:visited {
 
 .left_nav {
   min-height: 100vh;
-  width: 150px;
+  width: 100px;
   background: #77000c;
   color: #ddd; }
   .left_nav a {

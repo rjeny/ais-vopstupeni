@@ -6,10 +6,10 @@
             </div>
             <div class="auth__form">
                 <div class="form-group">
-                    <input name="auth_login" title="login" placeholder="Ваш e-mail"/>
+                    <input name="auth_login" title="login" placeholder="Ваш e-mail" v-model="login"/>
                 </div>
                 <div class="form-group">
-                    <input name="auth_password" title="password" placeholder="Пароль" type="password"/>
+                    <input name="auth_password" title="password" placeholder="Пароль" type="password" v-model="password"/>
                 </div>
                 <button class="btn btn-important" @click="authorise()">ВОЙТИ</button>
                 <button class="btn btn-gray">РЕГИСТРАЦИЯ</button>
@@ -20,9 +20,23 @@
 
 <script>
     export default {
+        data: function () {
+            return {
+                login: '',
+                password: ''
+            }
+        },
         methods:{
             authorise: function () {
-                console.log('Яро жму кнопку!');
+                this.$http.post('o/token/', {
+                    grant_type: 'password',
+                    username: this.login,
+                    password: this.password
+                }).then(response => {
+                    console.log(response);
+                }).catch(response => {
+                    console.log(response);
+                });
                 this.$emit('authenticate');
             }
         }

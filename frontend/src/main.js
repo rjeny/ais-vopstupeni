@@ -4,6 +4,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import interactjs from 'interactjs'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
 
 import Auth from './components/Auth.vue'
 
@@ -25,15 +27,31 @@ const router = new VueRouter({
     ]
 });
 
+let ais$http = axios.create({
+    baseURL: 'http://api.vopstupeni.rjeny.ru/',
+    timeout: 1000,
+    auth: {
+        login: 'lYRMiYvgMOVZcmNglpzuIQBPLaziZZfoKTQqIvFJ',
+        password: '46LOsa8Q5or4y2qRAds5rXdxNwIsiiYmITM2jmFRfRwkskUvK8ogxZsIqyVS6Aznj2gNRTCaY4ipMtuSAKTmEiVRqcurdACdRkP5wRGPEyQhpy7JOp419TFHecAZ65UZ'
+    }
+});
+
 Vue.use(VueRouter);
+Vue.use(VueAxios, ais$http);
 
 const app = new Vue({
     el: '#app',
     router: router,
     data: {
-        not_authenticated: false
+        not_authenticated: true,
+        login: '',
+        password: ''
     },
+    methods: {
+      authorize: function (e) {
 
+      }
+    },
     components: {
         'auth': Auth
     },

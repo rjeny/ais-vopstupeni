@@ -72,6 +72,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     vk_user_id = models.CharField('Идентификатор vk', max_length=64, unique=True,  null=True)
     telegram_id = models.CharField('Идентификатор telegram',max_length=63,  unique=True,  null=True)
     university = models.ForeignKey(University, on_delete=models.CASCADE, blank=True, null=True)
+    is_staff = models.BooleanField('Работничек', default=False)
 
     objects = UserManager()
 
