@@ -33,7 +33,9 @@ let ais$http = axios.create({
     auth: {
         login: 'lYRMiYvgMOVZcmNglpzuIQBPLaziZZfoKTQqIvFJ',
         password: '46LOsa8Q5or4y2qRAds5rXdxNwIsiiYmITM2jmFRfRwkskUvK8ogxZsIqyVS6Aznj2gNRTCaY4ipMtuSAKTmEiVRqcurdACdRkP5wRGPEyQhpy7JOp419TFHecAZ65UZ'
-    }
+    },
+    xsrfCookieName: 'csrftoken',
+    xsrfHeaderName: 'xsrfHeaderName',
 });
 
 Vue.use(VueRouter);
@@ -44,12 +46,17 @@ const app = new Vue({
     router: router,
     data: {
         not_authenticated: true,
-        login: '',
-        password: ''
+        access_token: '',
+        refresh_token: ''
     },
     methods: {
-      authorize: function (e) {
-
+      authorize: function (response) {
+          console.log(response.data);
+          this.axios.defaults.headers.common['Authorization'] = response.data.access;
+          this.access_token  = response.data.access;
+          this.refresh_token = response.data.refresh;
+          console.log(this.axios.defaults.headers.common);
+          this.not_authenticated = false;
       }
     },
     components: {

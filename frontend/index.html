@@ -9,7 +9,7 @@
 <body>
 <div id="app">
     <transition name="auth">
-        <auth v-if="not_authenticated" v-on:authenticate="not_authenticated = !not_authenticated"></auth>
+        <auth v-if="not_authenticated" v-on:authenticate="authorize"></auth>
     </transition>
     <div class="main">
         <div class="left_nav">

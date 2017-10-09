@@ -28,16 +28,14 @@
         },
         methods:{
             authorise: function () {
-                this.$http.post('o/token/', {
-                    grant_type: 'password',
-                    username: this.login,
+                this.$http.post('api/token/', {
+                    email: this.login,
                     password: this.password
                 }).then(response => {
-                    console.log(response);
+                    this.$emit('authenticate', response);
                 }).catch(response => {
                     console.log(response);
                 });
-                this.$emit('authenticate');
             }
         }
     }
