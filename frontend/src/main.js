@@ -6,6 +6,7 @@ import VueRouter from 'vue-router'
 import interactjs from 'interactjs'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import Vuetable from 'vuetable-2'
 
 import Auth from './components/Auth.vue'
 
@@ -13,6 +14,7 @@ import Auth from './components/Auth.vue'
 import Dashboard from './components/dashboard/Dashboard.vue'
 import Tests from './components/tests/Tests.vue'
 import EduBlocs from './components/edu_blocks/EduBlocks.vue'
+import Requests from './components/request/Requests.vue'
 
 // Стили
 import './assets/css/animation.css'
@@ -24,6 +26,7 @@ const router = new VueRouter({
         { path: '/', component: Dashboard},
         { path: '/tests', component: Tests},
         { path: '/edu_blocks', component: EduBlocs},
+        { path: '/request', component: Requests},
     ]
 });
 
@@ -40,12 +43,13 @@ let ais$http = axios.create({
 
 Vue.use(VueRouter);
 Vue.use(VueAxios, ais$http);
+Vue.use(Vuetable);
 
 const app = new Vue({
     el: '#app',
     router: router,
     data: {
-        not_authenticated: true,
+        not_authenticated: false,
         access_token: '',
         refresh_token: ''
     },
