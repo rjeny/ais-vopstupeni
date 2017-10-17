@@ -27,6 +27,11 @@
                 console.log(this.test_data);
                 this.test_data.name = name;
             }
+        },
+        created: function () {
+            this.$http('tests/').then(response => {
+                console.log(response)
+            })
         }
     }
 </script>

@@ -28,7 +28,7 @@
         },
         methods:{
             authorise: function () {
-                this.$http.post('api/token/', {
+                this.$http.post('token/', {
                     email: this.login,
                     password: this.password
                 }).then(response => {

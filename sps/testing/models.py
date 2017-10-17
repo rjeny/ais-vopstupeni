@@ -5,7 +5,7 @@ from django.contrib.postgres.fields import HStoreField
 # Create your models here.
 class Test(models.Model):
     name = models.CharField('Название', max_length=255)
-    event = models.ForeignKey('events.Event', on_delete=models.CASCADE, blank=True)
+    event = models.ForeignKey('events.Event', on_delete=models.CASCADE, blank=True, null=True)
     open_date = models.DateField('Дата открытия')
     close_date = models.DateField('Дата закрытия')
     description = models.TextField('Описание')

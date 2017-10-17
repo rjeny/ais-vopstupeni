@@ -16,16 +16,20 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from rest_framework import routers
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token, verify_jwt_token
 from core import views
+from testing import views as testing_view
 
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
 router.register(r'groups', views.GroupViewSet)
+router.register(r'tests', testing_view.TestViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^admin/', admin.site.urls),
-    url(r'^api/token/$', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    url(r'^api/token/refresh/$', TokenRefreshView.as_view(), name='token_refresh'),
+    url(r'^first/', views.start_info),
+    url(r'^token/$', obtain_jwt_token),
+    url(r'^token/refresh/$', refresh_jwt_token),
+    url(r'^token/check/$', verify_jwt_token),
 ]

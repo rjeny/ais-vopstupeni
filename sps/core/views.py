@@ -3,6 +3,8 @@ from rest_framework import viewsets
 from .api import UserSerializer, GroupSerializer
 from .models import User
 from rest_framework import permissions
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.response import Response
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -20,3 +22,11 @@ class GroupViewSet(viewsets.ModelViewSet):
     """
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
+
+
+@api_view(['GET'])
+@permission_classes((permissions.AllowAny,))
+def start_info(request, format=None):
+    queryset = User.objects.get(pk = 1)
+    serializer = UserSerializer(queryset)
+    return Response(serializer.data)

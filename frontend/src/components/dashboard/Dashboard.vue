@@ -5,13 +5,15 @@
                 <img src="/src/assets/images/iam.jpg">
             </div>
             <div class="persona__full_name">
-                Рябинин Евгений Сергеевич
+                {{ $store.getters.getUserInfo.last_name }}
+                {{ $store.getters.getUserInfo.first_name }}
+                {{ $store.getters.getUserInfo.middle_name }}
             </div>
             <div></div>
             <div class="persona__info">
                 <dl>
                     <dt>Email</dt>
-                    <dd>rjeny@Yandex.ru</dd>
+                    <dd>{{ $store.getters.getUserInfo.email }}</dd>
                     <dt>Телефон</dt>
                     <dd>+7(921)895-15-39</dd>
                     <dt>Университет</dt>
@@ -52,6 +54,12 @@
         },
         components: {
             notifications: Notifications,
+        },
+        computed: {
+            fullName: function () {
+                let user = this.$store.getters.getUserInfo;
+               return user.last_name + ' ' + user.first_name + ' ' + user.middle_name;
+            }
         }
     }
 </script>

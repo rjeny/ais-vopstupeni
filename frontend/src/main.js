@@ -7,14 +7,17 @@ import interactjs from 'interactjs'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import Vuetable from 'vuetable-2'
+import VueCookie from 'vue-cookie'
+import Vuex from 'vuex'
 
 import Auth from './components/Auth.vue'
 
 //Router Components
+import Empty from './components/Empty.vue'
 import Dashboard from './components/dashboard/Dashboard.vue'
 import Tests from './components/tests/Tests.vue'
 import EduBlocs from './components/edu_blocks/EduBlocks.vue'
-import Requests from './components/request/Requests.vue'
+import Requests from './components/requests/Requests.vue'
 
 // Стили
 import './assets/css/animation.css'
@@ -23,49 +26,93 @@ import './assets/css/base.css'
 const router = new VueRouter({
     mode: 'history',
     routes: [
-        { path: '/', component: Dashboard},
+        { path: '/', component: Empty},
+        { path: '/dashboard', component: Dashboard},
         { path: '/tests', component: Tests},
         { path: '/edu_blocks', component: EduBlocs},
-        { path: '/request', component: Requests},
+        { path: '/requests', component: Requests},
     ]
 });
 
 let ais$http = axios.create({
     baseURL: 'http://api.vopstupeni.rjeny.ru/',
     timeout: 1000,
-    auth: {
-        login: 'lYRMiYvgMOVZcmNglpzuIQBPLaziZZfoKTQqIvFJ',
-        password: '46LOsa8Q5or4y2qRAds5rXdxNwIsiiYmITM2jmFRfRwkskUvK8ogxZsIqyVS6Aznj2gNRTCaY4ipMtuSAKTmEiVRqcurdACdRkP5wRGPEyQhpy7JOp419TFHecAZ65UZ'
-    },
     xsrfCookieName: 'csrftoken',
     xsrfHeaderName: 'xsrfHeaderName',
 });
 
 Vue.use(VueRouter);
+Vue.use(Vuex);
 Vue.use(VueAxios, ais$http);
 Vue.use(Vuetable);
+Vue.use(VueCookie);
+
+const store = new Vuex.Store({
+    state: {
+        user: {
+            first_name: '',
+            last_name: '',
+            middle_name: '',
+            email: '',
+            university: '',
+            avatar: '',
+        }
+    },
+    mutations: {
+        updateUser (state, user) {
+            state.user.first_name = user.first_name;
+            state.user.last_name = user.last_name;
+            state.user.middle_name = user.middle_name;
+            state.user.email = user.email;
+            state.user.avatar = user.avatar;
+        }
+    },
+    getters: {
+        getUserInfo: (state) => {
+            return state.user
+        }
+    }
+});
 
 const app = new Vue({
     el: '#app',
     router: router,
+    store: store,
     data: {
         not_authenticated: false,
-        access_token: '',
-        refresh_token: ''
+        user: '',
     },
     methods: {
       authorize: function (response) {
           console.log(response.data);
-          this.axios.defaults.headers.common['Authorization'] = response.data.access;
-          this.access_token  = response.data.access;
-          this.refresh_token = response.data.refresh;
+          this.$http.defaults.headers.common['Authorization'] = 'JWT ' + response.data.token;
+          this.access_token  = response.data.token;
+          this.$cookie.set('token', response.data.token);
           console.log(this.axios.defaults.headers.common);
           this.not_authenticated = false;
+          store.commit('updateUser', response.data.user);
+
+          let a = this.$http.get('users/');
+          console.log(a);
       }
     },
     components: {
         'auth': Auth
     },
+
+    created: function () {
+        let token = this.$cookie.get('token');
+        if (token) {
+            this.$http.post('token/check/', {token: token}).then(response => {
+                this.$http.defaults.headers.common['Authorization'] = 'JWT ' + response.data.token;
+                this.not_authenticated = false;
+                store.commit('updateUser', response.data.user);
+                this.$router.replace('/dashboard');
+            })
+        } else {
+            this.not_authenticated = true;
+        }
+    }
 });
 
 interactjs('.content-flex div:first-child').resizable({
